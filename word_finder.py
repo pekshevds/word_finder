@@ -1,7 +1,7 @@
 import argparse
 from os import path
 
-MAX_FILE_LENGTH = 64
+MAX_FILE_LENGTH = 64*1024
 
 def encoding_of_this_file_is_utf_8(file_name):
     """
@@ -44,8 +44,8 @@ def check_file(file_name):
     if not encoding_of_this_file_is_utf_8(file_name):
         return False, 'the encoding of this file is not utf-8'
 
-    if path.getsize(filename=file_name)//1024 > MAX_FILE_LENGTH:
-        return False, f'the size of this file more than {MAX_FILE_LENGTH}Kb'
+    if not (1 <= path.getsize(filename=file_name) < MAX_FILE_LENGTH):
+        return False, f'the size of this file must be between 1 byte and {MAX_FILE_LENGTH//1024}Kb'
 
     return True, 'ok'
 
@@ -63,6 +63,7 @@ def split_some_text_into_words(text):
     split some text into words
     """
     return text.split(' ')
+
 
 def get_cleared_words(text):
     """
