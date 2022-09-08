@@ -8,6 +8,12 @@ def encoding_of_this_file_is_utf_8(file_name):
     check encoding some file
     """
 
+    file = open(file_name, mode='r', encoding='utf-8')
+    try:
+        file.read()
+    except UnicodeDecodeError:
+        return False
+
     return True
 
 
@@ -16,7 +22,12 @@ def this_file_is_text(file_name):
     check if file is text
     """
     
-    return True
+    try:
+        open(file_name, mode='rb', encoding='utf-8')
+    except ValueError:
+        return True
+
+    return False
 
 
 def check_file(file_name):
