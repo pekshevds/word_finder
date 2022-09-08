@@ -35,6 +35,18 @@ def check_file(file_name):
     check the file for some params (existence, content type, encoding end etc)
     """    
 
+    if not path.exists(file_name) or not path.isfile(file_name):
+        return False, 'this file does not exist or is not a file'
+    
+    if not this_file_is_text(file_name):
+        return False, 'this file is not a text file'
+    
+    if not encoding_of_this_file_is_utf_8(file_name):
+        return False, 'the encoding of this file is not utf-8'
+
+    if path.getsize(filename=file_name)//1024 > MAX_FILE_LENGTH:
+        return False, f'the size of this file more than {MAX_FILE_LENGTH}Kb'
+
     return True, 'ok'
 
 
@@ -52,6 +64,14 @@ def split_some_text_into_words(text):
     """
     return text.split(' ')
 
+def get_cleared_words(text):
+    """
+    split text into words and cleare them
+    """
+
+    dirty_words = split_some_text_into_words(text)
+    return list(map(delete_some_simbols_from_word, dirty_words))
+
 
 def parse_file(file_name):
     """
@@ -59,7 +79,18 @@ def parse_file(file_name):
      and sorts by frequency of occurrence
     """    
 
-    return []
+    file = open(file_name, mode='r', encoding='utf-8')
+    words = get_cleared_words(file.read())
+
+    rating = {}
+    for word in words:
+        
+        if rating.get(word, 0) == 0:
+            rating[word] = 1
+        else:
+            rating[word] += 1
+    
+    return sorted(rating.items(), reverse= True, key=lambda x: x[1])
    
 
 def init_parser():
