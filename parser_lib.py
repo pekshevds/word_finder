@@ -1,4 +1,5 @@
 import argparse
+from collections import Counter
 from word_lib import get_cleared_words
 
 
@@ -20,12 +21,8 @@ def parse_file(file_name):
     with open(file_name, mode='r', encoding='utf-8') as file:
         words = get_cleared_words(file.read())
 
-    rating = {}
+    rating = Counter()
     for word in words:
-        
-        if rating.get(word, 0) == 0:
-            rating[word] = 1
-        else:
-            rating[word] += 1
+        rating[word] += 1
     
     return sorted(rating.items(), reverse= True, key=lambda x: x[1])

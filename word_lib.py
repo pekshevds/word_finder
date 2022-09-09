@@ -3,7 +3,7 @@ def delete_some_simbols_from_word(word):
     cleaning the word from unnecessary characters
     """
 
-    return "".join(ch for ch in word if not ch in """!@#$%^&*()/"*-+\|?><.,№;%:[]}{='""").lower()
+    return "".join(ch for ch in word if ch.isalpha() or ch.isdigit()).lower()
 
 
 def split_some_text_into_words(text):
