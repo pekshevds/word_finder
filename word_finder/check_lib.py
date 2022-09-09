@@ -1,11 +1,11 @@
 from os import path
-import config
+from .config import MAX_FILE_LENGTH_Kb
 
 
 __all__ = ['check_the_file_for_some_parameters']
 
 
-def encoding_of_this_file_is_utf_8(file_name):
+def _encoding_of_this_file_is_utf_8(file_name):
     
     with open(file_name, mode='r', encoding='utf-8') as file:
         try:
@@ -16,17 +16,17 @@ def encoding_of_this_file_is_utf_8(file_name):
     return True
 
 
-def this_file_is_text(file_name):
+def _this_file_is_text(file_name):
     """
     check if file is text
     """
     
     try:
-        file = open(file_name, mode='rb', encoding='utf-8')
+        with open(file_name, mode='rb', encoding='utf-8') as file:
+            pass
     except ValueError:
         return True
 
-    file.close()
     return False
 
 
@@ -38,13 +38,13 @@ def check_the_file_for_some_parameters(file_name):
     if not path.exists(file_name) or not path.isfile(file_name):
         return 'this file does not exist or is not a file'
     
-    if not this_file_is_text(file_name):
+    if not _this_file_is_text(file_name):
         return 'this file is not a text file'
     
-    if not encoding_of_this_file_is_utf_8(file_name):
+    if not _encoding_of_this_file_is_utf_8(file_name):
         return 'the encoding of this file is not utf-8'
 
-    if not (1 <= path.getsize(filename=file_name) < config.MAX_FILE_LENGTH):
-        return f'the size of this file must be between 1 byte and {config.MAX_FILE_LENGTH//1024}Kb'
+    if not (1 <= path.getsize(filename=file_name) < MAX_FILE_LENGTH_Kb):
+        return f'the size of this file must be between 1 byte and {MAX_FILE_LENGTH_Kb//1024}Kb'
 
     return ''
